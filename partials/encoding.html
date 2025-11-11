@@ -1,0 +1,155 @@
+<section class="section-blue pt-3 pb-5 mt-0">
+    <div class="container">
+    <h1 class="section-title display-5 text-center mb-4">Ontology Encoding</h1>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+        <ul class="mb-0">During this activity, the ontology development team generates computable models in a machine readable format, for example the OWL language.
+        </div>
+    </div>
+    </div>
+</section>
+
+<!-- ===== Steps (banda gris) ===== -->
+<section class="section-gray py-5">
+    <div class="container">
+        <h1 class="section-title display-5 text-center mb-4">Steps</h1>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <!-- Paso 1 -->
+                <div class="step-box step mb-4 p-4">
+                    <h5>1. Design your ontology name</h5>
+                    <ul>
+                        <li>Define your ontology URI, for example</li>
+                        <ul>
+                            <li>Hash vs slash</li>
+                            <li>Opaque URIs?</li>
+                        </ul>
+                    </ul>
+                    <button class="btn btn-pill" onclick="toggleInput('prefixInput')">Check your prefix</button>
+                    <button class="btn btn-pill" onclick="toggleInput('uriInput')">Check your candidate URI</button>
+
+              
+                    <div id="prefixInput" class="input-container" style="display:none;">
+                        <form id="prefixForm" onsubmit="submitForm('prefixField'); return false;" class="d-flex">
+                            <input type="text" id="prefixField" placeholder="Enter prefix" class="form-control" style="flex-grow: 1;" />
+                            <button type="submit" class="btn btn-pill ms-2">Submit</button>
+                        </form>
+        
+                        <div id="loadingSpinner" class="text-center my-2" style="display: none;">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+
+
+                        <div id="resultContainer" class="alert alert-light mt-2" style="display:none;"></div>
+                    </div>
+                    <div id="uriInput" class="input-container" style="display:none;">
+                        <form id="uriForm" onsubmit="submitForm('uriField'); return false;" class="d-flex">
+                            <input type="text" id="uriField" placeholder="Enter URI" class="form-control" style="flex-grow: 1;" />
+                            <button type="submit" class="btn btn-pill ms-2">Submit</button> 
+                        </form>
+                    </div>
+                </div>
+
+                <div class="step-box step mb-4 p-4">
+                    <h5>2. Add basic metadata</h5>
+                    <p>Snippet</p>
+                    <button class="btn btn-pill">Example of snippet</button>
+                </div>
+
+                <div class="step-box step mb-4 p-4">
+                    <h5>3. Think about versions!</h5>
+                    <button class="btn btn-pill">Check your version schema</button>
+                </div>
+
+                <div class="step-box step mb-4 p-4">
+                    <h5>4. Generate code in different serializations</h5>
+                    <p>If you have a chowlk diagram...</p>
+                    <button class="btn btn-pill">Chowlk drag and drop</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-blue pt-3 pb-5 mt-0">
+    <div class="container">
+    <h1 class="section-title display-5 text-center mb-4">Why?</h1>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+        <ul class="mb-0">During this activity the actual machine-readable version of the ontology is produced. It is key to apply FAIR Principles to this resource as it represents the main product of the ontology development process.
+        </div>
+    </div>
+    </div>
+</section>
+
+<section class="section-gray py-5">
+    <div class="container">
+    <div class="container px-0">
+        <div class="row split-row gx-5">
+        <!-- Columna izquierda -->
+        <div class="col-lg-6 d-flex justify-content-center mb-4 mb-lg-0">
+            <div class="half-inner">
+            <h2 class="fw-bold display-6">Resources</h2>
+            <ul class="mt-3 mb-0">
+                <li>Ontology code in an formal implementation language, for example OWL or RDF(S)</li>
+            </ul>
+            </div>
+        </div>
+
+        <!-- Columna derecha -->
+        <div class="col-lg-6 d-flex justify-content-center">
+            <div class="half-inner">
+            <h2 class="fw-bold display-6">Roles</h2>
+            <ul class="mt-3 mb-0">
+                <li>Ontology development team</li>
+            </ul>
+        </div>
+        </div>
+    </div>
+    </div>
+</section>
+
+<section class="section-blue py-5">
+    <div class="container">
+    <h1 class="section-title display-5 text-center mb-4">PRINCIPLES</h1>
+
+    <!-- Barra de botones -->
+    <div class="pillbar d-flex justify-content-center flex-wrap gap-3 mb-4">
+        <button type="button" class="btn btn-pill active" data-key="findable">Findable</button>
+        <button type="button" class="btn btn-pill active" data-key="accessible">Accessible</button>
+        <button type="button" class="btn btn-pill active" data-key="interoperable">Interoperable</button>
+        <button type="button" class="btn btn-pill active" data-key="reusable">Reusable</button>
+    </div>
+
+    <!-- Contenidos asociados (uno por botón) -->
+    <div class="fair-content mx-auto" style="max-width: 980px;">
+        <div class="block" data-key="findable">
+        <h5 class="fw-bold">Findable</h5>
+        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eu tristique arcu…</p>
+        <hr class="border-light opacity-25">
+        </div>
+
+        <div class="block" data-key="accessible">
+        <h5 class="fw-bold">Accessible</h5>
+        <p class="mb-0">Data must be easily accessible… Lorem ipsum dolor sit amet, consectetur…</p>
+        <hr class="border-light opacity-25">
+        </div>
+
+        <div class="block" data-key="interoperable">
+        <h5 class="fw-bold">Interoperable</h5>
+        <p class="mb-0">Use open formats and shared vocabularies… Lorem ipsum dolor sit amet…</p>
+        <hr class="border-light opacity-25">
+        </div>
+
+        <div class="block" data-key="reusable">
+        <h5 class="fw-bold">Reusable</h5>
+        <p class="mb-0">Provide provenance, licensing and documentation… Lorem ipsum dolor sit amet…</p>
+        </div>
+    </div>
+    </div>
+</section>
