@@ -68,14 +68,19 @@
                 <div class="step-box step mb-4 p-4">
                     <h5>4. Generate code in different serializations</h5>
                     <p>If you have a chowlk diagram...</p>
-                    <button class="btn btn-pill">Chowlk drag and drop</button>
+                    <div class="drop-area" id="drag-drop-area" style="cursor: pointer;">
+                        <p class="lead text-dark drag-text" id="drag-text">Drag and drop your diagram or click to choose
+                            your file</p>
+                        <div id="response" style="display: none;"></div>
+                        <input type="file" id="fileElem" style="display: none;">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<section class="section-blue pt-3 pb-5 mt-0">
+<section id="whySection" class="section-blue pt-3 pb-5 mt-0">
     <div class="container">
     <h1 class="section-title display-5 text-center mb-4">Why?</h1>
 
@@ -114,7 +119,7 @@
     </div>
 </section>
 
-<section class="section-blue py-5">
+<section id="principlesSection" class="section-blue py-5">
     <div class="container">
     <h1 class="section-title display-5 text-center mb-4">PRINCIPLES</h1>
 
@@ -130,26 +135,81 @@
     <div class="fair-content mx-auto" style="max-width: 980px;">
         <div class="block" data-key="findable">
         <h5 class="fw-bold">Findable</h5>
-        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eu tristique arcu…</p>
+        <p class="mb-0">FVF-1: Vocabulary and their terms are assigned globally unique and persistent identifiers.</p>
+        <p class="mb-0">G&P-1: Design ontology name and prefix.</p>
+        <p class="mb-0">G&P-5: Use of permanent URIs.</p>
+        <p class="mb-0">Does the ontology have a "local" identifier, i.e., a globally unique and potentially permanent identifier assigned by the developer (or developing organization)?</p>
+        <p class="mb-0">P-Rec1: Globally Unique, Persistent and Resolvable Identifiers must be used for Semantics Artefacts, their content (terms/concepts/classes and relations) and their versions</p>
+        <p class="mb-0">Rule-5: Assign a unique and persistent identifier to (a) the vocabulary and (b) each term in the vocabulary.</p>
+        <p class="mb-0">FVF-2: Vocabularies and their terms have rich metadata.</p>
+        <p class="mb-0">G&P-6: Generate ontology metadata.</p>
+        <p class="mb-0">P-Rec3: A common minimum metadata schema must be used to describe semantic artefacts and their content.</p>
+        <p class="mb-0">Rule-7: Add vocabulary metadata.</p>
+        <p class="mb-0">G&P-6: Generate ontology metadata.</p>
+        <p class="mb-0">F3Q1: Are the ontology metadata included and maintained in the ontology file?</p>
+        <p class="mb-0">F3Q2: If not, are the ontology metadata described in an external file?</p>
+        <p class="mb-0">F3Q3: Does that external file explicitly link to the ontology and vice-versa?</p>
         <hr class="border-light opacity-25">
         </div>
 
         <div class="block" data-key="accessible">
         <h5 class="fw-bold">Accessible</h5>
-        <p class="mb-0">Data must be easily accessible… Lorem ipsum dolor sit amet, consectetur…</p>
+        <p class="mb-0">FVF-6: Vocabularies and their terms are persistent over time and are appropriately versioned.</p>
+        <p class="mb-0">G&P-1: Design ontology name and prefix.</p>
+        <p class="mb-0">G&P-2: Decide between hash or slash URIs.</p>
+        <p class="mb-0">G&P-3: Decide whether to use opaque URIs.</p>
+        <p class="mb-0">G&P-4: Define an ontology versioning strategy.</p>
+        <p class="mb-0">G&P-9: Provide the ontology online in multiple formats (HTML and ontology serializations).</p>
+        <p class="mb-0">P-Rec8: Human and machine-readable persistence policies for semantic artefacts metadata and data must be defined.</p>
+        
+        <p class="mb-0"></p>
+        <p class="mb-0"></p>
         <hr class="border-light opacity-25">
         </div>
 
         <div class="block" data-key="interoperable">
         <h5 class="fw-bold">Interoperable</h5>
-        <p class="mb-0">Use open formats and shared vocabularies… Lorem ipsum dolor sit amet…</p>
+        <p class="mb-0">FVF-7: Vocabularies and their terms use a formal, accessible and broadly applicable, and preferably machine-understandable language for knowledge representation.</p>
+        <p class="mb-0">I1Q1: What is the representation language used for the ontology and ontology metadata?</p>
+        <p class="mb-0">I1Q2: Is the representation language used in a W3C Recommendation?</p>
+        <p class="mb-0">I1Q3: Is the syntax of the ontology informed?</p>
+        <p class="mb-0">I1Q4: Is the formality level of the ontology informed?</p>
+        <p class="mb-0">I1Q5: Is the availability of other syntaxes/formats informed?</p>
+        <p class="mb-0">P-Rec9: Semantic artefacts must be made available as a minimum portfolio of common serialisation formats.</p>
+        <p class="mb-0">P-Rec10: Foundational Ontologies may be used to align semantic artefacts.</p>
+        <p class="mb-0">P-Rec11: A standardised language should be used for describing high expressivity semantic artefacts.</p>
+        <p class="mb-0">P-Rec12: Semantic mappings between the different elements of semantic artefacts should be serialised in machine-readable formats.</p>
+        <p class="mb-0">Rule-6: Create machine readable representations of the vocabulary terms.</p>
+        <p class="mb-0">P-Rec10: Foundational Ontologies may be used to align semantic artefacts.</p>
+        <p class="mb-0">P-Rec14: Standard vocabularies should be used to describe semantic artefacts.</p>
+        <p class="mb-0">FVF-8: Vocabularies and terms use qualified references to other vocabularies.</p>
+        <p class="mb-0">I3Q1: Does the ontology provide qualified cross-references to external resources/databases?</p>
+        <p class="mb-0">I3Q2: If yes, are those cross-references well represented and to unambiguous entities?</p>
+        <p class="mb-0">I3Q3: Does the ontology use valid URIs to encode some metadata values?</p>
+        <p class="mb-0">P-Rec10: Foundational Ontologies may be used to align semantic artefacts.</p>
+        <p class="mb-0">P-Rec12: Semantic mappings between the different elements of semantic artefacts should be serialised in machine-readable formats.</p>
+        <p class="mb-0"></p>
+        <p class="mb-0"></p>
         <hr class="border-light opacity-25">
         </div>
 
         <div class="block" data-key="reusable">
         <h5 class="fw-bold">Reusable</h5>
-        <p class="mb-0">Provide provenance, licensing and documentation… Lorem ipsum dolor sit amet…</p>
+        <p class="mb-0">FVF-2: Vocabularies and their terms have rich metadata.</p>
+        <p class="mb-0">FVF-9: Vocabularies and terms are described with a plurality of accurate and relevant attributes.</p>
+        <p class="mb-0">G&P-6: Generate ontology metadata.</p>
+        <p class="mb-0">R1Q5: How many ontology objects are defined using a property restriction or an equivalent class?</p>
+        <p class="mb-0">R1Q6: How much ontology objects provide provenance information with annotation properties (e.g., author, date)?</p>
+        <p class="mb-0">G&P-6: Generate ontology metadata.</p>
+        <p class="mb-0">P-Rec3: A common minimum metadata schema must be used to describe semantic artefacts and their content.</p>
+        <p class="mb-0">P-Rec17: Provenance must be clear for both humans and machines.</p>
+        <p class="mb-0">Rule-7: Add vocabulary metadata.</p>
+        <p class="mb-0">P-Rec3: A common minimum metadata schema must be used to describe semantic artefacts and their content.</p>
+        <p class="mb-0">P-Rec12: Semantic mappings between the different elements of semantic artefacts should be serialised in machine-readable formats.</p>
+        <p class="mb-0"></p>
+
         </div>
+        
     </div>
     </div>
 </section>
