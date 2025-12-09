@@ -254,10 +254,15 @@
 
       // Solo encoding tiene drag & drop
       if (contentFile === 'partials/encoding.html' && typeof initializeDragAndDrop === 'function') {
-        initializeDragAndDrop();
+        if (typeof initializeDragAndDrop === 'function') {
+          initializeDragAndDrop();
+        }
+        if (typeof initializeMetadataForm === 'function') {
+          initializeMetadataForm();
+        }
       }
       })
-      .catch(error => console.error('Error al cargar el contenido:', error));
+    .catch(error => console.error('Error al cargar el contenido:', error));
   }
 
   function navigate(direction) {
@@ -274,11 +279,14 @@
   }
 
   function updateHotspotPinFor(contentFile) {
-    const el = document.querySelector('.hotspot[data-page="' + contentFile + '"]');
-    if (typeof placePinOn === 'function') {
-      placePinOn(el || null); 
-    }
+  const el = document.querySelector('.hotspot[data-page="' + contentFile + '"]');
+  if (!el) return; // si no hay hotspot asociado, no tocamos la chincheta
+
+  if (typeof placePinOn === 'function') {
+    placePinOn(el);
   }
+}
+
 
   // Función para inicializar los botones después de cargar el HTML
   function initializeButtonEvents() {
@@ -370,4 +378,3 @@
   </div>
 </body>
 </html>
-
