@@ -29,24 +29,6 @@
                         </ul>
                     </ul>
 
-              
-                    <!-- PREFIJO -->
-                    <div id="prefixInput" class="input-container mb-3">
-                        <form id="prefixForm" onsubmit="submitForm('prefixField'); return false;" class="d-flex">
-                        <input type="text" id="prefixField" placeholder="Enter prefix" class="form-control" style="flex-grow: 1;" />
-                        <button type="submit" class="btn btn-pill ms-2">Submit</button>
-                        </form>
-
-                        <!-- Spinner y resultado SOLO para prefix -->
-                        <div id="loadingSpinnerPrefix" class="text-center my-2" style="display: none;">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                        </div>
-
-                        <div id="resultContainerPrefix" class="alert alert-light mt-2" style="display:none;"></div>
-                    </div>
-
 
                     <!-- NAMESPACE URI -->
                     <div id="uriInput" class="input-container">
@@ -93,6 +75,29 @@
                         </div>
 
                         <div id="resultContainerUri" class="alert alert-light mt-2" style="display:none;"></div>
+
+                    <ul>
+                        <li>Declare your prefix</li>
+                    </ul>
+
+              
+                    <!-- PREFIJO -->
+                    <div id="prefixInput" class="input-container mb-3">
+                        <form id="prefixForm" onsubmit="submitForm('prefixField'); return false;" class="d-flex">
+                        <input type="text" id="prefixField" placeholder="Enter prefix" class="form-control" style="flex-grow: 1;" />
+                        <button type="submit" class="btn btn-pill ms-2">Submit</button>
+                        </form>
+
+                        <!-- Spinner y resultado SOLO para prefix -->
+                        <div id="loadingSpinnerPrefix" class="text-center my-2" style="display: none;">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        </div>
+
+                        <div id="resultContainerPrefix" class="alert alert-light mt-2" style="display:none;"></div>
+                    </div>
+
                     </div>
                 </div>
 

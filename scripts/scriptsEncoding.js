@@ -73,6 +73,11 @@ function checkNamespaceURI(uri) {
     }
   }
 
+  let versionUri = uri;
+  if (uri[uri.length - 1] === '/') {
+    versionUri = uri.slice(0, -1) + '#';
+  }
+
   // 3) Proveedor recomendado
   if (host) {
     const recommendedHosts = [
@@ -175,7 +180,7 @@ function checkNamespaceURI(uri) {
       ${messages.join("")}
     </ul>
   `;
-  checkVersionSchema(uri);
+  checkVersionSchema(versionUri);
 }
 
 
@@ -279,6 +284,7 @@ function checkVersionSchema(uri) {
   versionBox.innerHTML = "";
 
   if (!uri) {
+    versionBox.classList.remove("alert-light");
     versionBox.classList.add("alert-warning");
     versionBox.innerHTML = `
       <strong>Versioning check</strong>
@@ -328,11 +334,6 @@ function checkVersionSchema(uri) {
 
   // Elegir esquema inicial por defecto
   let initialScheme = 'semver';
-  if (!semverUsed && calverUsed) {
-    initialScheme = 'calver';
-  } else if (!semverUsed && !calverUsed) {
-    initialScheme = 'custom';
-  }
 
   versionBox.innerHTML = `
     <strong>Versioning scheme</strong>
@@ -576,7 +577,11 @@ function transformDiagramWithChowlk(file) {
         throw new Error(`HTTP ${res.status} ${res.statusText} – ${t || 'no body'}`);
       });
     }
-    return res.json();
+    try {
+      return JSON.parse(text);
+    } catch {
+      throw new Error(`Respuesta no es JSON: ${text}`);
+    }
   })
   .then(data => {
     const ttl = data.ttl_data || '';
@@ -667,7 +672,7 @@ document.addEventListener('change', function (e) {
     opaque: `
       <strong>Opaque URIs</strong>
       <ul class="mb-0">
-        <li><strong>Pro:</strong> easier for version control and for multi-linguality.</li>
+        <li><strong>Pro:</strong> better for compatibility with legacy systems and for multi-linguality.</li>
         <li><strong>Con:</strong> difficult to read.</li>
       </ul>
     `,
@@ -754,7 +759,6 @@ function updateMetadataSnippet() {
   ttl += `@prefix ${prefix}: <${base}> .\n`;
   ttl += '@prefix owl:    <http://www.w3.org/2002/07/owl#> .\n';
   ttl += '@prefix dcterms:<http://purl.org/dc/terms/> .\n';
-  ttl += '@prefix pav:    <http://purl.org/pav/> .\n';
   ttl += '@prefix vann:   <http://purl.org/vocab/vann/> .\n\n';
 
   // Ontology metadata
@@ -770,17 +774,17 @@ function updateMetadataSnippet() {
   }
 
   if (creators.length === 0) {
-    ttl += `    pav:createdBy "add creator name" ;\n`;
+    ttl += `    dcterms:creator "add creator name" ;\n`;
   } else {
     creators.forEach(c => {
-      ttl += `    pav:createdBy "${esc(c)}" ;\n`;
+      ttl += `    dcterms:creator "${esc(c)}" ;\n`;
     });
   }
 
   if (versionIri) {
     ttl += `    owl:versionIRI <${versionIri}> ;\n`;
   } else {
-    ttl += `    # owl:versionIRI <${base}1.0.0> ;\n`;
+    ttl += `    owl:versionIRI <${base}1.0.0> ;\n`;
   }
 
   ttl += `    vann:preferredNamespaceUri <${base}> .\n`;

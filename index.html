@@ -54,7 +54,13 @@
     <!-- Map -->
     <div class="page-content mb-0">
       <main class="container py-2 pb-0">  
+        <p class="text-center fw-bold mb-3">
+          Click on the ontology development phases or activities to get actionable steps to accomplish them
+        </p>
         <div class="position-relative" style="max-width:1140px; margin:auto;">
+          
+          
+
           <img src="assets/FiguraLOT.svg" class="img-fluid d-block " alt="Mapa FAIRbyDesign" onload="sendHeight()">
           <a class="hotspot" data-page="partials/conceptualization.html" href="javascript:void(0);" onclick="loadContent('partials/conceptualization.html')" style="left:14.74%; top:20.06%; width:10.53%; height:17.96%;"></a>
           <a class="hotspot" data-page="partials/encoding.html" href="javascript:void(0);" onclick="loadContent('partials/encoding.html')" data-key="encoding" style="left:29.65%; top:20.06%; width:10.53%; height:17.96%;"></a>
@@ -253,13 +259,14 @@
       }
 
       // Solo encoding tiene drag & drop
-      if (contentFile === 'partials/encoding.html' && typeof initializeDragAndDrop === 'function') {
+      if (contentFile === 'partials/encoding.html') {
         if (typeof initializeDragAndDrop === 'function') {
           initializeDragAndDrop();
         }
         if (typeof initializeMetadataForm === 'function') {
           initializeMetadataForm();
         }
+        checkVersionSchema(null)
       }
       })
     .catch(error => console.error('Error al cargar el contenido:', error));
@@ -311,6 +318,13 @@
     pills.forEach(btn => {
       btn.addEventListener('click', () => {
         btn.classList.toggle('active');
+
+        if (!btn.classList.contains('active')) {
+            btn.classList.add('toggled'); // Añadir el estilo de tachado
+        } else {
+            btn.classList.remove('toggled'); // Quitar el tachado
+        }
+
         update(); // Actualizar los bloques que se muestran
       });
     });
@@ -325,12 +339,7 @@
     loadContent('partials/principal.html'); // Aquí especificas el archivo principal
   }
 
-  window.addEventListener('message', (ev) => {
-    if (!ev.data || typeof ev.data.height !== 'number') return;
-    if (ev.data.type === 'HEADER_HEIGHT') document.getElementById('appHeader').style.height = ev.data.height + 'px';
-    if (ev.data.type === 'FOOTER_HEIGHT') document.getElementById('appFooter').style.height = ev.data.height + 'px';
-    if (ev.data.type === 'MAP_HEIGHT')    document.getElementById('appMapa').style.height   = ev.data.height + 'px';
-  });
+  
 
   document.addEventListener('DOMContentLoaded', () => {
   const toggleBtn  = document.getElementById('brandMenuToggle');
