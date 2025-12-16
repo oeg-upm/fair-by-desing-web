@@ -16,7 +16,33 @@
 
         <div class="row justify-content-center">
             <div class="col-lg-10">
-                <!-- Paso 1 -->
+                
+                <div class="step-box step mb-4 p-4">
+                    <span class="step-pill">improves f.</span>
+                    <h5>1. Ontology reuses existing vocabularies for metadata annotations</h5>
+                    <form id="vocabForm" class="d-flex">
+                        <input type="text" id="vocabField" placeholder="Enter ontology URI" class="form-control" style="flex-grow: 1;" />
+                        <button type="submit" class="btn btn-pill ms-2">Submit</button>
+                    </form>
+
+                    <!-- contenedor para el resultado del test VOC1 -->
+                    <div id="voc1Result" class="alert mt-3" style="display:none;"></div>
+                    <pre id="voc1Raw" class="mt-2" style="display:none; max-height:300px; overflow:auto;"></pre>
+                </div>
+
+                <div class="step-box step mb-4 p-4">
+                    <h5>2. Ontology imports or reuses well established vocabularies</h5>
+                    <form id="vocab2Form" class="d-flex">
+                        <input type="text" id="vocab2Field" placeholder="Enter ontology URI" class="form-control" style="flex-grow: 1;" />
+                        <button type="submit" class="btn btn-pill ms-2">Submit</button>
+                    </form>
+
+                    <!-- contenedor para el resultado del test VOC1 -->
+                    <div id="voc2Result" class="alert mt-3" style="display:none;"></div>
+                    <pre id="voc2Raw" class="mt-2" style="display:none; max-height:300px; overflow:auto;"></pre>
+                </div>
+
+                
                 
             </div>
         </div>
