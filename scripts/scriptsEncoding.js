@@ -14,10 +14,11 @@ function submitForm(fieldId) {
     if (fieldId === 'prefixField') {
         // CHECK YOUR PREFIX (prefix.cc)
         checkPrefix(value);
+        updateMetadataSnippet();
     } else if (fieldId === 'uriField') {
       checkNamespaceURI(value);
-        // CHECK YOUR URI (FOOPS)
-      //sendRequest(value);
+      updateMetadataSnippet();
+      
     }
 }
 
@@ -233,45 +234,6 @@ function checkPrefix(prefix) {
 }
 
 
-function sendRequest(value) {
-  const spinner = document.getElementById('loadingSpinnerUri');
-  const result = document.getElementById('resultContainerUri');
-
-  result.style.display = "none";
-  result.innerHTML = "";
-  result.className = "alert mt-2";
-
-  spinner.style.display = "block";
-
-  const requestData = {
-    resource_identifier: `https://w3id.org/${value}#`
-  };
-
-  fetch("https://foops.linkeddata.es/assess/test/FIND2", {
-    method: "POST",
-    headers: {
-      "accept": "application/json",
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(requestData)
-  })
-    .then(response => response.json())
-    .then(data => {
-      spinner.style.display = "none";
-      result.style.display = "block";
-      result.classList.add("alert-success");
-      result.innerHTML = `
-        <strong>Response:</strong>
-        <pre class="mb-0">${JSON.stringify(data, null, 2)}</pre>
-      `;
-    })
-    .catch(error => {
-      spinner.style.display = "none";
-      result.style.display = "block";
-      result.classList.add("alert-danger");
-      result.innerHTML = `<strong>Error:</strong> ${error.message}`;
-    });
-}
 
 
 function checkVersionSchema(uri) {
@@ -399,6 +361,7 @@ function checkVersionSchema(uri) {
     } else {
       preview.textContent = '(please enter a version string)';
     }
+    updateMetadataSnippet();
   }
 
   schemeSelect.addEventListener('change', () => {
@@ -413,6 +376,32 @@ function checkVersionSchema(uri) {
   // Inicializar
   setDefaultsForScheme();
   updatePreview();
+}
+
+
+
+function getCurrentVersionIri() {
+  // 1) Preferimos la preview si existe y no es placeholder
+  const previewEl = document.getElementById('versionUriPreview');
+  if (previewEl) {
+    const t = previewEl.textContent.trim();
+    if (t && !t.startsWith('(')) return t;
+  }
+
+  // 2) Si no hay preview utilizable, construimos con namespace + suffix
+  const uriInput    = document.getElementById('uriField');
+  const suffixInput = document.getElementById('versionSuffixInput');
+
+  if (!uriInput || !suffixInput) return '';
+
+  const ns = (uriInput.value || '').trim();
+  const suffix = (suffixInput.value || '').trim();
+  if (!ns || !suffix) return '';
+
+  const last = ns[ns.length - 1];
+  const base = (last === '/' || last === '#') ? ns : (ns + '/');
+
+  return base + suffix;
 }
 
 
@@ -459,6 +448,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  setDownloadTtlEnabled(false);
 
 });
 
@@ -554,53 +544,78 @@ function initializeDragAndDrop() {
   }
 
   // Llamada a la API de Chowlk desde el navegador
+
 function transformDiagramWithChowlk(file) {
   const uri = 'https://chowlk.linkeddata.es/api';
   const formData = new FormData();
 
-  // nombre del campo = "data", tal y como dice la doc de Chowlk
+  // nombre del campo = "data", tal y como indica la documentación de Chowlk
   formData.append('data', file, file.name);
 
   fetch(uri, {
     method: 'POST',
     body: formData,
     headers: {
-      // Igual que el curl con "Accept: application/json"
+      // Pedimos JSON si el servidor lo soporta
       'Accept': 'application/json'
-      // NO pongas Content-Type a mano, que si no rompes el boundary del multipart
+      // NO pongas Content-Type manualmente en multipart/form-data
     }
+    // mode: 'cors' // (opcional) para dejar claro el modo CORS
   })
   .then(res => {
     if (!res.ok) {
-      // Para ver bien qué devuelve el servidor
+      // Mostrar cuerpo de error del servidor (si lo hay)
       return res.text().then(t => {
         throw new Error(`HTTP ${res.status} ${res.statusText} – ${t || 'no body'}`);
       });
     }
-    try {
-      return JSON.parse(text);
-    } catch {
-      throw new Error(`Respuesta no es JSON: ${text}`);
+
+    // Intentar decidir cómo parsear en función del Content-Type
+    const ct = res.headers.get('content-type') || '';
+    if (ct.includes('application/json')) {
+      return res.json();
+    } else {
+      // Si no es JSON, puede que devuelva texto con JSON o TTL directo
+      return res.text().then(t => {
+        try {
+          // Prueba parseo JSON por si es texto con JSON
+          return JSON.parse(t);
+        } catch {
+          // Si no es JSON, asumimos que es TTL directamente
+          return { ttl_data: t };
+        }
+      });
     }
   })
-  .then(data => {
-    const ttl = data.ttl_data || '';
+  
+.then(data => {
+  // Chowlk devuelve la TTL bajo 'ttl_data' (según tu uso)
+  const ttl = data.ttl_data || data.ttl || '';
 
-    generatedTtl = ttl;
-    dragText.style.display = 'none';
-    response.style.display = 'block';
+  // Construir metadata TTL en crudo y fusionarlo con el TTL de Chowlk
+  const metadataTtl = getMetadataTtlRaw();   // ← usa tu Paso 1
+  const finalTtl    = mergeTtls(metadataTtl, ttl);
 
-    response.innerHTML = `
-      <strong>Generated Turtle (TTL) from your diagram:</strong>
-      <pre class="mt-2 mb-0" style="white-space: pre; overflow-x:auto;">${escapeHtml(ttl)}</pre>
-    `;
+  // Guardar el TTL combinado para la descarga
+  generatedTtl = finalTtl;
 
-    if (downloadWrapper) {
-      downloadWrapper.style.display = 'block';
-    }
+  dragText.style.display = 'none';
+  response.style.display = 'block';
+
+  response.innerHTML = `
+       <strong>Combined Turtle (TTL): metadata + diagram</strong>
+    <pre class="mt-2 mb-0" style="white-space: pre; overflow-x:auto;">${escapeHtml(finalTtl)}</pre>
+  `;
+
+  if (downloadWrapper) {
+    downloadWrapper.style.display = 'block';
+  }
+  setDownloadTtlEnabled(true)
   })
   .catch(err => {
     console.error('Error calling Chowlk:', err);
+
+    tDownloadTtlEnabled(false);
 
     dragText.style.display = 'block';
     dragText.textContent = 'There was an error transforming your diagram. Please try again.';
@@ -615,7 +630,7 @@ function transformDiagramWithChowlk(file) {
     if (downloadWrapper) {
       downloadWrapper.style.display = 'none';
     }
-  });
+   });
 }
 
 
@@ -649,6 +664,86 @@ function transformDiagramWithChowlk(file) {
       .replace(/>/g, '&gt;');
   }
 }
+
+
+
+function splitPrefixesAndBody(ttl) {
+  const lines = ttl.split('\n');
+  const prefixLines = [];
+  const bodyLines = [];
+  const prefixRegex = /^\s*@prefix\s+[\w\-]+:\s*<[^>]+>\s*\.\s*$/;
+  lines.forEach(line => {
+    if (prefixRegex.test(line)) prefixLines.push(line);
+    else bodyLines.push(line);
+  });
+  return { prefixLines, body: bodyLines.join('\n').trim() };
+}
+
+function mergeTtls(metadataTtl, chowlkTtl) {
+  const { prefixLines: p1, body: b1 } = splitPrefixesAndBody(metadataTtl);
+  const { prefixLines: p2, body: b2 } = splitPrefixesAndBody(chowlkTtl);
+
+  // Mapa de prefijos únicos (prioriza los del metadata si hay conflicto)
+  const map = new Map();
+  const parse = line => {
+    const m = line.match(/@prefix\s+([\w\-]+):\s*<([^>]+)>\s*\./);
+    return m ? [m[1], m[2]] : null;
+  };
+  p1.forEach(line => {
+    const kv = parse(line);
+    if (kv) map.set(kv[0], kv[1]);
+  });
+  p2.forEach(line => {
+    const kv = parse(line);
+    if (kv && !map.has(kv[0])) map.set(kv[0], kv[1]);
+   });
+
+  const mergedPrefixes = Array.from(map.entries())
+    .map(([pref, iri]) => `@prefix ${pref}: <${iri}> .`)
+    .join('\n');
+
+  // TTL combinado: prefijos únicos + cuerpo metadata + cuerpo chowlk
+  return `${mergedPrefixes}\n\n${b1}\n\n${b2}\n`;
+}
+
+
+
+function setDownloadTtlEnabled(enabled) {
+  const btn = document.getElementById('downloadTtlBtn');
+  const wrapper = document.getElementById('downloadTtlWrapper');
+  if (!btn) return;
+
+  // Muestra el wrapper y controla solo el estado del botón
+  if (wrapper) wrapper.style.display = 'block';
+  btn.disabled = !enabled;
+}
+
+function getSuggestedFilenameFromMetadata() {
+  const titleInput  = document.getElementById('mdTitle');
+  const prefixInput = document.getElementById('prefixField');
+
+  const title  = (titleInput?.value || '').trim();
+  const prefix = (prefixInput?.value || 'ontology').trim();
+
+  // Base del nombre (slug)
+  const base = (title || prefix || 'ontology')
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, '-')  // separa por guiones (soporta unicode)
+    .replace(/^-+|-+$/g, '');          // limpia guiones extremos
+
+  // Versión desde el versionIRI (último segmento)
+  let version = '';
+  const iri = (typeof getCurrentVersionIri === 'function') ? getCurrentVersionIri() : '';
+  if (iri) {
+    const m = iri.match(/([^/#]+)$/);
+    if (m) version = m[1];
+  }
+
+  const today = new Date().toISOString().slice(0,10); // YYYY-MM-DD
+  return `${base}${version ? '-' + version : ''}-${today}.ttl`;
+  }
+
+
 
 // Manejar explicación de opaque/readable aunque el HTML se cargue por AJAX
 // Manejar explicación de opaque/readable aunque el HTML se cargue por AJAX
@@ -699,11 +794,12 @@ document.addEventListener('change', function (e) {
   explanation.classList.remove('d-none');
 });
 
-function updateMetadataSnippet() {
-  const snippetPre = document.getElementById('metadataSnippet');
-  if (!snippetPre) return;
 
-  // Prefix y namespace desde el paso 1
+
+
+
+function getMetadataTtlRaw() {
+  // Prefix y namespace (paso 1)
   const prefixInput = document.getElementById('prefixField');
   const uriInput    = document.getElementById('uriField');
 
@@ -713,61 +809,69 @@ function updateMetadataSnippet() {
   if (!prefix) prefix = 'ex';
   if (!ns) ns = 'http://example.com/ontology#';
 
-  // Aseguramos que el namespace termina en / o #
+  // Asegurar que el namespace para @prefix y vann termina en / o #
   let base = ns;
   const lastChar = base[base.length - 1];
   if (lastChar !== '/' && lastChar !== '#') {
     base = base + '#';
   }
 
-  // Version IRI desde el paso 2 (preview)
-  const versionPreviewEl = document.getElementById('versionUriPreview');
-  let versionIri = versionPreviewEl ? versionPreviewEl.textContent.trim() : '';
-  if (!versionIri || versionIri.startsWith('(')) {
-    versionIri = ''; // modo "please enter..." → ignorar
+  // Versión: usa preview si está, o construye con uri + suffix
+  let versionIri = '';
+  const previewEl = document.getElementById('versionUriPreview');
+  if (previewEl) {
+    const t = previewEl.textContent.trim();
+    if (t && !t.startsWith('(')) {
+      versionIri = t; // usar la preview válida
+    }
+  }
+  if (!versionIri) {
+    const suffixInput = document.getElementById('versionSuffixInput');
+    if (suffixInput) {
+      const suffix = (suffixInput.value || '').trim();
+      if (suffix) {
+        const last = ns[ns.length - 1];
+        const versionBase = (last === '/' || last === '#') ? ns : (ns + '/');
+        versionIri = versionBase + suffix;
+      }
+    }
   }
 
-  // Campos de metadata del paso 3
-  const titleInput   = document.getElementById('mdTitle');
-  const descInput    = document.getElementById('mdDescription');
-  const licenseInput = document.getElementById('mdLicense');
+  // Campos de metadata (paso 3)
+  const titleInput       = document.getElementById('mdTitle');
+  const descInput        = document.getElementById('mdDescription');
+  const licenseInput     = document.getElementById('mdLicense');
   const creatorContainer = document.getElementById('creatorContainer');
 
   const title   = titleInput && titleInput.value.trim() ? titleInput.value.trim() : 'add ontology title';
-
-  const desc    = descInput && descInput.value.trim() ? descInput.value.trim() : 'add ontology description';
-
+  const desc    = descInput  && descInput.value.trim()  ? descInput.value.trim()  : 'add ontology description';
   const license = licenseInput && licenseInput.value.trim() ? licenseInput.value.trim() : '';
 
-  // Todos los creadores (pueden ser varios)
+  // Creadores (0..n)
   let creators = [];
   if (creatorContainer) {
-    creators = Array.from(
-      creatorContainer.querySelectorAll('.creator-input')
-    )
-    .map(el => el.value.trim())
-    .filter(Boolean);
+    creators = Array.from(creatorContainer.querySelectorAll('.creator-input'))
+      .map(el => el.value.trim())
+      .filter(Boolean);
   }
 
+  // Escapado básico para literales
   function esc(str) {
     return str.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
   }
 
+  // Construcción del TTL crudo (con < > reales)
   let ttl = '';
-
-  // Prefix declarations
   ttl += `@prefix ${prefix}: <${base}> .\n`;
   ttl += '@prefix owl:    <http://www.w3.org/2002/07/owl#> .\n';
   ttl += '@prefix dcterms:<http://purl.org/dc/terms/> .\n';
   ttl += '@prefix vann:   <http://purl.org/vocab/vann/> .\n\n';
 
-  // Ontology metadata
   ttl += `${prefix}: a owl:Ontology ;\n`;
   ttl += `    dcterms:title "${esc(title)}" ;\n`;
   ttl += `    dcterms:description "${esc(desc)}" ;\n`;
 
   if (license) {
-    // Como viene de un <select>, asumimos que es siempre una IRI
     ttl += `    dcterms:license <${license}> ;\n`;
   } else {
     ttl += `    dcterms:license "TODO: add license (e.g. CC-BY-4.0)" ;\n`;
@@ -789,8 +893,22 @@ function updateMetadataSnippet() {
 
   ttl += `    vann:preferredNamespaceUri <${base}> .\n`;
 
-  snippetPre.textContent = ttl;
+  return ttl;
 }
+
+
+
+
+
+
+function updateMetadataSnippet() {
+  const snippetPre = document.getElementById('metadataSnippet');
+  if (!snippetPre) return;
+
+  const ttl = getMetadataTtlRaw(); // ← usa el TTL crudo generado en el Paso 1
+  snippetPre.textContent = ttl;    // ← lo muestra directamente
+}
+
 
 
 function initializeMetadataForm() {
