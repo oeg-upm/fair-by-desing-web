@@ -38,9 +38,8 @@
 
                 <div class="collapse navbar-collapse" id="topNav">
                   <ul class="navbar-nav ms-auto gap-sm-4">
-                    <li class="nav-item"><a class="nav-link" target="_top" href="/index.html">XXXXX</a></li>
-                    <li class="nav-item"><a class="nav-link" target="_top" href="/principles.html">XXXXXXX</a></li>
-                    <li class="nav-item"><a class="nav-link" target="_top" href="/why.html">XXXX</a></li>
+                    <li class="nav-item"><a class="nav-link"  href="https://github.com/Izan-Navarro/fair-by-desing-web">Github</a></li>
+                    <li class="nav-item"><a class="nav-link" onclick="window.location.reload(); return false;" href="#">Home</a></li>
                   </ul>
                 </div>
               </nav>
@@ -61,7 +60,7 @@
           
           
 
-          <img src="assets/FiguraLOT.svg" class="img-fluid d-block " alt="Mapa FAIRbyDesign" onload="sendHeight()">
+          <img src="assets/FiguraLOT.svg" class="img-fluid d-block " alt="Mapa FAIRbyDesign">
           <a class="hotspot" data-page="partials/conceptualization.html" href="javascript:void(0);" onclick="loadContent('partials/conceptualization.html')" style="left:14.74%; top:20.06%; width:10.53%; height:17.96%;"></a>
           <a class="hotspot" data-page="partials/encoding.html" href="javascript:void(0);" onclick="loadContent('partials/encoding.html')" data-key="encoding" style="left:29.65%; top:20.06%; width:10.53%; height:17.96%;"></a>
           <a class="hotspot" data-page="partials/evaluation.html" href="javascript:void(0);" onclick="loadContent('partials/evaluation.html')" style="left:44.85%; top:20.06%; width:10.53%; height:17.96%;"></a>
@@ -163,11 +162,6 @@
       <footer>
         <div class="container footer-content d-flex flex-column flex-sm-row align-items-center justify-content-between gap-2">
           <div>© <span id="y"></span> FAIRbyDesign · All rights reserved</div>
-          <div class="d-flex gap-3">
-            <a href="/principles.html">Principles</a>
-            <a href="/why.html">Why?</a>
-            <a href="/index.html">Top</a>
-          </div>
         </div>
       </footer>
     </div>
@@ -186,7 +180,7 @@
 
     <div class="d-grid gap-2">
       <button type="button" class="btn btn-pill text-start" onclick="loadContent('partials/principal.html')">
-        Top / Overview
+        Home
       </button>
       <button type="button" class="btn btn-pill text-start" onclick="loadContent('partials/requirements.html')">
         Requirements
@@ -194,13 +188,24 @@
       <button type="button" class="btn btn-pill text-start" onclick="loadContent('partials/conceptualization.html')">
         Conceptualization
       </button>
+      <button type="button" class="btn btn-pill text-start" onclick="loadContent('partials/reuse.html')">
+        Reuse
+      </button>
       <button type="button" class="btn btn-pill text-start" onclick="loadContent('partials/encoding.html')">
         Encoding
       </button>
       <button type="button" class="btn btn-pill text-start" onclick="loadContent('partials/evaluation.html')">
         Evaluation
       </button>
-      <!-- Añade aquí los botones que quieras -->
+      <button type="button" class="btn btn-pill text-start" onclick="loadContent('partials/documentation.html')">
+        Documentation
+      </button>
+      <button type="button" class="btn btn-pill text-start" onclick="loadContent('partials/publication.html')">
+        Online publication
+      </button>
+      <button type="button" class="btn btn-pill text-start" onclick="loadContent('partials/maintenance.html')">
+        Maintenance
+      </button>
     </div>
   </div>
 </nav>
@@ -256,6 +261,9 @@
 
         if (container.querySelector('.pillbar')) {
         initializeButtonEvents();
+        if (container.querySelector('.checklist-toggle')) {
+          if (typeof initChecklist === 'function') initChecklist();
+        }
       }
 
       // Solo encoding tiene drag & drop
@@ -375,6 +383,12 @@
 </script>
 <script src="scripts/scriptsEncoding.js"></script>
 <script src="scripts/scriptsFoops.js"></script>
+<script src="scripts/scriptsChecklist.js"></script>
+<script src="scripts/scriptsReuse.js"></script>
+<script src="scripts/scriptsConceptualization.js"></script>
+<script src="scripts/scriptsDocumentation.js"></script>
+<script src="scripts/scriptsPublication.js"></script>
+<script src="scripts/scriptsMaintenance.js"></script>
   <div class="floating-shortcuts">
     <button type="button" class="btn btn-pill floating-btn" id="btnToTop" aria-label="Ir arriba">
       Top

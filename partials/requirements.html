@@ -16,7 +16,133 @@
 
         <div class="row justify-content-center">
             <div class="col-lg-10">
+                
+                
+                
+                <!-- Progreso -->
+                <div class="d-flex align-items-center justify-content-between my-3">
+                <div class="flex-grow-1 me-3">
+                    <div class="progress" style="height: 8px;">
+                    <div id="checklistProgressBar" class="progress-bar bg-success" role="progressbar" style="width: 0%;" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+                <small id="checklistProgressText" class="text-muted">0% completado</small>
+                </div>
+
+                <!-- Acciones -->
+                <div class="d-flex gap-2 mb-3">
+                <button type="button" id="btnChecklistMarkAll" class="btn btn-outline-success btn-sm rounded-pill">
+                    <i class="bi bi-check2-all me-1"></i> Marcar todo
+                </button>
+                <button type="button" id="btnChecklistReset" class="btn btn-outline-secondary btn-sm rounded-pill">
+                    <i class="bi bi-arrow-counterclockwise me-1"></i> Reiniciar
+                </button>
+                </div>
+
                 <!-- Paso 1 -->
+                <div class="step-box step mb-4 p-4 border" data-step-id="step-1">
+                <span class="step-pill d-inline-block mb-2">Checklist</span>
+
+                <h5>1. Provide identifiers to functional requirements</h5>
+                <p class="mb-0">
+                    Assign identifiers to functional requirements (competency questions or other forms).
+                </p>
+
+                <div class="d-flex justify-content-end mt-3">
+                    <div class="form-check form-switch m-0">
+                    <input class="form-check-input checklist-toggle switch-lg" type="checkbox" id="chk-step-1">
+                    </div>
+                </div>
+                </div>
+
+                <!-- Paso 2 -->
+                <div class="step-box step mb-4 p-4 border" data-step-id="step-2">
+                <span class="step-pill d-inline-block mb-2">Checklist</span>
+
+                <h5>2. Provide links to functional requirements</h5>
+                <p class="mb-0">
+                    Provide links to functional requirements (competency questions or other forms) either in a compiled version
+                    or separated in different files.
+                </p>
+
+                <div class="d-flex justify-content-end mt-3">
+                    <div class="form-check form-switch m-0">
+                    <input class="form-check-input checklist-toggle switch-lg" type="checkbox" id="chk-step-2">
+                    </div>
+                </div>
+                </div>
+
+                <!-- Paso 3 -->
+                <div class="step-box step mb-4 p-4 border" data-step-id="step-3">
+                <span class="step-pill d-inline-block mb-2">Checklist</span>
+
+                <h5>3. Provide versioning information</h5>
+                <p class="mb-0">
+                    Provide versioning information about the requirements and the ontology versions.
+                </p>
+
+                <div class="d-flex justify-content-end mt-3">
+                    <div class="form-check form-switch m-0">
+                    <input class="form-check-input checklist-toggle switch-lg" type="checkbox" id="chk-step-3">
+                    </div>
+                </div>
+                </div>
+
+                <!-- Paso 4 -->
+                <div class="step-box step mb-4 p-4 border" data-step-id="step-4">
+                <span class="step-pill d-inline-block mb-2">Checklist</span>
+
+                <h5>4. Provide requirements metadata</h5>
+                <p class="mb-0">
+                    Provide metadata information about requirements (e.g., requirements identifier, author, creation date,
+                    version of the ORSD, license of the ORSD, keywords, produced ontology, etc.).
+                </p>
+
+                <div class="d-flex justify-content-end mt-3">
+                    <div class="form-check form-switch m-0">
+                    <input class="form-check-input checklist-toggle switch-lg" type="checkbox" id="chk-step-4">
+                    </div>
+                </div>
+                </div>
+
+                <!-- Paso 5 -->
+                <div class="step-box step mb-4 p-4 border" data-step-id="step-5">
+                <span class="step-pill d-inline-block mb-2">Checklist</span>
+
+                <h5>5. Use HTTP URIs for requirements</h5>
+                <p class="mb-0">
+                    Use HTTP URIs to identify requirements (or sets) and retrieve them.
+                </p>
+
+                <div class="d-flex justify-content-end mt-3">
+                    <div class="form-check form-switch m-0">
+                    <input class="form-check-input checklist-toggle switch-lg" type="checkbox" id="chk-step-5">
+                    </div>
+                </div>
+                </div>
+
+                <!-- Paso 6 -->
+                <div class="step-box step mb-4 p-4 border" data-step-id="step-6">
+                <span class="step-pill d-inline-block mb-2">Checklist</span>
+
+                <h5>6. Provide requirements in an open format</h5>
+                <p class="mb-0">
+                    Provide requirements at least in an open format file as CSV or text. You can use the Ontology Requirement
+                    Specification Document templates following the NeOn and LOT methodology, for example:
+                    <a href="https://github.com/oeg-upm/LOT-resources/tree/master/templates%20for%20ORSD"
+                    target="_blank" rel="noopener">
+                    LOT resources templates for ORSD
+                    </a>.
+                </p>
+
+                <div class="d-flex justify-content-end mt-3">
+                    <div class="form-check form-switch m-0">
+                    <input class="form-check-input checklist-toggle switch-lg" type="checkbox" id="chk-step-6">
+                    </div>
+                </div>
+                </div>
+
+
                 
             </div>
         </div>

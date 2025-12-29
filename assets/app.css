@@ -20,7 +20,7 @@ body { margin: 0; }
 
 /* Navegación */
 .navbar .nav-link{
-  color:#fff; opacity:.95; font-weight:800;
+  color:#fff; opacity:.95; font-weight:600;
   text-transform:uppercase; letter-spacing:.5px; font-size:.95rem;
 }
 .navbar .nav-link:hover{ opacity:1; }
@@ -112,7 +112,7 @@ body { margin: 0; }
   position: fixed;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 9999;
+  z-index: 1000;
   width: 48px;
   height: 48px;
   border: none;
@@ -308,3 +308,10 @@ body { margin: 0; }
   z-index: 2;
   white-space: nowrap;
 }
+
+/* Switch más grande */
+.switch-lg {
+  transform: scale(1.35);
+  transform-origin: right center;
+}
+

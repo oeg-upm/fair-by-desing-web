@@ -16,8 +16,34 @@
 
         <div class="row justify-content-center">
             <div class="col-lg-10">
-                <!-- Paso 1 -->
-                
+               
+               
+                <!-- Test OM4.2-T -->
+                <div class="step-box step mb-4 p-4">
+                    <h5>1. Ontology maintenance policy is clearly defined</h5>
+                    <form id="om42Form" class="d-flex">
+                        <input type="text" id="om42Field" placeholder="Enter ontology URI"
+                            class="form-control" style="flex-grow: 1;" />
+                        <button type="submit" class="btn btn-pill ms-2">Submit</button>
+                    </form>
+                    <div id="om42Result" class="alert mt-3" style="display:none;"></div>
+                    <pre id="om42Raw" class="mt-2" style="display:none; max-height:300px; overflow:auto;"></pre>
+                </div>
+
+                <!-- Test VER2-T -->
+                <div class="step-box step mb-4 p-4">
+                    <h5>2. Ontology version IRI resolves</h5>
+                    <form id="ver2Form" class="d-flex">
+                        <input type="text" id="ver2Field" placeholder="Enter ontology URI"
+                            class="form-control" style="flex-grow: 1;" />
+                        <button type="submit" class="btn btn-pill ms-2">Submit</button>
+                    </form>
+                    <div id="ver2Result" class="alert mt-3" style="display:none;"></div>
+                    <pre id="ver2Raw" class="mt-2" style="display:none; max-height:300px; overflow:auto;"></pre>
+                </div>
+
+
+
             </div>
         </div>
     </div>

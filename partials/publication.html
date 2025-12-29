@@ -12,11 +12,130 @@
 
 <section class="section-gray py-5">
     <div class="container">
-        <h1 class="section-title display-5 text-center mb-4">Steps</h1>
+        
 
         <div class="row justify-content-center">
             <div class="col-lg-10">
+
+                <div class="position-relative mb-4">
+                    <h1 class="section-title display-5 text-center mb-0">Steps</h1>
+
+                    <button type="button"
+                            id="runAllPublicationTests"
+                            class="btn btn-pill position-absolute end-0 top-50 translate-middle-y">
+                        Run all tests
+                    </button>
+                </div>
+                
                 <!-- Paso 1 -->
+                <div class="step-box step mb-4 p-4">
+                <h5>1. Ontology uses an open protocol (HTTP/HTTPS)</h5>
+                <form id="http1Form" class="d-flex">
+                    <input type="text" id="http1Field" placeholder="Enter ontology URI" class="form-control" style="flex-grow: 1;" />
+                    <button type="submit" class="btn btn-pill ms-2">Submit</button>
+                </form>
+                <div id="http1Result" class="alert mt-3" style="display:none;"></div>
+                <pre id="http1Raw" class="mt-2" style="display:none; max-height:300px; overflow:auto;"></pre>
+                </div>
+
+                <!-- Paso 2 -->
+                <div class="step-box step mb-4 p-4">
+                <h5>2. Ontology is available in RDF</h5>
+                <form id="rdf1Form" class="d-flex">
+                    <input type="text" id="rdf1Field" placeholder="Enter ontology URI" class="form-control" style="flex-grow: 1;" />
+                    <button type="submit" class="btn btn-pill ms-2">Submit</button>
+                </form>
+                <div id="rdf1Result" class="alert mt-3" style="display:none;"></div>
+                <pre id="rdf1Raw" class="mt-2" style="display:none; max-height:300px; overflow:auto;"></pre>
+                </div>
+
+                <!-- Paso 3 -->
+                <div class="step-box step mb-4 p-4">
+                <h5>3. Ontology has content negotiation for RDF</h5>
+                <form id="cn1Form" class="d-flex">
+                    <input type="text" id="cn1Field" placeholder="Enter ontology URI" class="form-control" style="flex-grow: 1;" />
+                    <button type="submit" class="btn btn-pill ms-2">Submit</button>
+                </form>
+                <div id="cn1Result" class="alert mt-3" style="display:none;"></div>
+                <pre id="cn1Raw" class="mt-2" style="display:none; max-height:300px; overflow:auto;"></pre>
+                </div>
+
+                <!-- Paso 4 -->
+                <div class="step-box step mb-4 p-4">
+                <h5>4. Ontology has HTML documentation</h5>
+                <form id="doc1Form" class="d-flex">
+                    <input type="text" id="doc1Field" placeholder="Enter ontology URI" class="form-control" style="flex-grow: 1;" />
+                    <button type="submit" class="btn btn-pill ms-2">Submit</button>
+                </form>
+                <div id="doc1Result" class="alert mt-3" style="display:none;"></div>
+                <pre id="doc1Raw" class="mt-2" style="display:none; max-height:300px; overflow:auto;"></pre>
+                </div>
+
+                <!-- Paso 5 -->
+                <div class="step-box step mb-4 p-4">
+                <h5>5. Ontology URI is resolvable</h5>
+                <form id="uri1Form" class="d-flex">
+                    <input type="text" id="uri1Field" placeholder="Enter ontology URI" class="form-control" style="flex-grow: 1;" />
+                    <button type="submit" class="btn btn-pill ms-2">Submit</button>
+                </form>
+                <div id="uri1Result" class="alert mt-3" style="display:none;"></div>
+                <pre id="uri1Raw" class="mt-2" style="display:none; max-height:300px; overflow:auto;"></pre>
+                </div>
+
+                <!-- Paso 6 -->
+                <div class="step-box step mb-4 p-4">
+                <h5>6. Consistent ontology IDs are employed</h5>
+                <form id="uri2Form" class="d-flex">
+                    <input type="text" id="uri2Field" placeholder="Enter ontology URI" class="form-control" style="flex-grow: 1;" />
+                    <button type="submit" class="btn btn-pill ms-2">Submit</button>
+                </form>
+                <div id="uri2Result" class="alert mt-3" style="display:none;"></div>
+                <pre id="uri2Raw" class="mt-2" style="display:none; max-height:300px; overflow:auto;"></pre>
+                </div>
+
+                <!-- Paso 7 -->
+                <div class="step-box step mb-4 p-4">
+                <h5>7. A version IRI is declared in the ontology metadata</h5>
+                <form id="ver1Form" class="d-flex">
+                    <input type="text" id="ver1Field" placeholder="Enter ontology URI" class="form-control" style="flex-grow: 1;" />
+                    <button type="submit" class="btn btn-pill ms-2">Submit</button>
+                </form>
+                <div id="ver1Result" class="alert mt-3" style="display:none;"></div>
+                <pre id="ver1Raw" class="mt-2" style="display:none; max-height:300px; overflow:auto;"></pre>
+                </div>
+
+                <!-- Paso 8 -->
+                <div class="step-box step mb-4 p-4">
+                <h5>8. Ontology version IRI resolves</h5>
+                <form id="ver2Form" class="d-flex">
+                    <input type="text" id="ver2Field" placeholder="Enter ontology URI" class="form-control" style="flex-grow: 1;" />
+                    <button type="submit" class="btn btn-pill ms-2">Submit</button>
+                </form>
+                <div id="ver2Result" class="alert mt-3" style="display:none;"></div>
+                <pre id="ver2Raw" class="mt-2" style="display:none; max-height:300px; overflow:auto;"></pre>
+                </div>
+
+                <!-- Paso 9 -->
+                <div class="step-box step mb-4 p-4">
+                <h5>9. Ontology found in community registry</h5>
+                <form id="find3Form" class="d-flex">
+                    <input type="text" id="find3Field" placeholder="Enter ontology URI" class="form-control" style="flex-grow: 1;" />
+                    <button type="submit" class="btn btn-pill ms-2">Submit</button>
+                </form>
+                <div id="find3Result" class="alert mt-3" style="display:none;"></div>
+                <pre id="find3Raw" class="mt-2" style="display:none; max-height:300px; overflow:auto;"></pre>
+                </div>
+
+                <!-- Paso 10 -->
+                <div class="step-box step mb-4 p-4">
+                <h5>10. Ontology metadata are accessible, even when the ontology is not</h5>
+                <form id="find3bisForm" class="d-flex">
+                    <input type="text" id="find3bisField" placeholder="Enter ontology URI" class="form-control" style="flex-grow: 1;" />
+                    <button type="submit" class="btn btn-pill ms-2">Submit</button>
+                </form>
+                <div id="find3bisResult" class="alert mt-3" style="display:none;"></div>
+                <pre id="find3bisRaw" class="mt-2" style="display:none; max-height:300px; overflow:auto;"></pre>
+                </div>
                 
             </div>
         </div>

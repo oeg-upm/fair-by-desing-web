@@ -18,7 +18,6 @@
             <div class="col-lg-10">
                 
                 <div class="step-box step mb-4 p-4">
-                    <span class="step-pill">improves f.</span>
                     <h5>1. Ontology reuses existing vocabularies for metadata annotations</h5>
                     <form id="vocabForm" class="d-flex">
                         <input type="text" id="vocabField" placeholder="Enter ontology URI" class="form-control" style="flex-grow: 1;" />
@@ -37,9 +36,76 @@
                         <button type="submit" class="btn btn-pill ms-2">Submit</button>
                     </form>
 
-                    <!-- contenedor para el resultado del test VOC1 -->
+                    <!-- contenedor para el resultado del test VOC2 -->
                     <div id="voc2Result" class="alert mt-3" style="display:none;"></div>
                     <pre id="voc2Raw" class="mt-2" style="display:none; max-height:300px; overflow:auto;"></pre>
+                </div>
+
+                <!-- Paso 3 -->
+                <div class="step-box step mb-4 p-4 border" data-step-id="reuse-1">
+                <span class="step-pill d-inline-block mb-2">Checklist</span>
+
+                <h5>3. Check accessibility of reused ontologies/terms</h5>
+                <p class="mb-0">
+                    Check that the reused ontologies or terms are accessible as any other objects within the ontology.
+                </p>
+
+                <div class="d-flex justify-content-end mt-3">
+                    <div class="form-check form-switch m-0">
+                    <input class="form-check-input checklist-toggle switch-lg" type="checkbox" id="chk-reuse-1">
+                    </div>
+                </div>
+                </div>
+
+                <!-- Paso 4 -->
+                <div class="step-box step mb-4 p-4 border" data-step-id="reuse-2">
+                <span class="step-pill d-inline-block mb-2">Checklist</span>
+
+                <h5>4. Check metadata of reused terms</h5>
+                <p class="mb-0">
+                    Check metadata of reused terms.
+                </p>
+
+                <div class="d-flex justify-content-end mt-3">
+                    <div class="form-check form-switch m-0">
+                    <input class="form-check-input checklist-toggle switch-lg" type="checkbox" id="chk-reuse-2">
+                    </div>
+                </div>
+                </div>
+
+                <!-- Paso 5 -->
+                <div class="step-box step mb-4 p-4 border" data-step-id="reuse-3">
+                <span class="step-pill d-inline-block mb-2">Checklist</span>
+
+                <h5>5. Check licenses and repurposing permissions</h5>
+                <p class="mb-0">
+                    Check license of the reused vocabularies and whether they allow repurposing.
+                </p>
+
+                <div class="d-flex justify-content-end mt-3">
+                    <div class="form-check form-switch m-0">
+                    <input class="form-check-input checklist-toggle switch-lg" type="checkbox" id="chk-reuse-3">
+                    </div>
+                </div>
+                </div>
+
+                <!-- Paso 6 -->
+                <div class="step-box step mb-4 p-4 border" data-step-id="reuse-4">
+                <span class="step-pill d-inline-block mb-2">Checklist</span>
+
+                <h5>6. Use standard languages/primitives for reuse</h5>
+                <p class="mb-0">
+                    Use standard languages for implementing the reuse, for example OWL primitives
+                    (<code>owl:equivalentClass</code>, <code>owl:equivalentProperty</code>, etc.), RDF(S) primitives
+                    (<code>rdfs:subClassOf</code>, <code>rdfs:subPropertyOf</code>), SKOS properties
+                    (<code>skos:broader</code>, <code>skos:narrower</code>, etc.), SSSOM, etc.
+                </p>
+
+                <div class="d-flex justify-content-end mt-3">
+                    <div class="form-check form-switch m-0">
+                    <input class="form-check-input checklist-toggle switch-lg" type="checkbox" id="chk-reuse-4">
+                    </div>
+                </div>
                 </div>
 
                 

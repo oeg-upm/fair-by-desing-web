@@ -17,6 +17,41 @@
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <!-- Paso 1 -->
+
+
+                <div class="step-box step mb-4 p-4 border">
+                    <h5>1. Create a diagram</h5>
+                    <p class="mb-0">
+                        Create an initial conceptual diagram of the ontology (main classes, key relations, and constraints) to agree on scope and structure before implementation.
+                        A practical way to do this is to use <strong>Protégé</strong>, you can use it to sketch the core concepts, organize hierarchies, and discuss modeling decisions with your team.
+                        <br><br>
+                        <strong>Recommended tool:</strong>
+                        <a href="https://protegewiki.stanford.edu/wiki/ProtegeDesktopUserDocs" target="_blank" rel="noopener noreferrer">
+                        Protégé
+                        </a>
+                    </p>
+                </div>
+
+
+                <div class="step-box step mb-4 p-4">
+                    <h5>2. Generate code from a diagram</h5>
+                    <p>If you have a chowlk diagram...</p>
+                    <div class="drop-area" id="drag-drop-area" style="cursor: pointer;">
+                        <p class="lead text-dark drag-text" id="drag-text">
+                        Drag and drop your diagram or click to choose your file
+                        </p>
+                        <div id="response" style="display: none;"></div>
+
+                        <!-- NUEVO: botón de descarga TTL -->
+                        <div id="downloadTtlWrapper" class="mt-2 text-end" style="display:none;">
+                        <button type="button" id="downloadTtlBtn" class="btn btn-pill btn-sm">
+                            Download TTL
+                        </button>
+                        </div>
+
+                        <input type="file" id="fileElem" style="display: none;">
+                    </div>
+                </div>
                 
             </div>
         </div>

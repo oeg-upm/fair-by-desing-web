@@ -17,7 +17,28 @@
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <!-- Paso 1 -->
-                
+                <div class="step-box step mb-4 p-4">
+                    <h5>1. Ontology documentation: all terms have labels</h5>
+                    <form id="voc3Form" class="d-flex">
+                        <input type="text" id="voc3Field" placeholder="Enter ontology URI" class="form-control" style="flex-grow: 1;" />
+                        <button type="submit" class="btn btn-pill ms-2">Submit</button>
+                    </form>
+
+                    <div id="voc3Result" class="alert mt-3" style="display:none;"></div>
+                        <pre id="voc3Raw" class="mt-2" style="display:none; max-height:300px; overflow:auto;"></pre>
+                </div>
+
+                <div class="step-box step mb-4 p-4">
+                    <h5>2. Ontology documentation: all terms have definitions</h5>
+                    <form id="voc4Form" class="d-flex">
+                        <input type="text" id="voc4Field" placeholder="Enter ontology URI" class="form-control" style="flex-grow: 1;" />
+                        <button type="submit" class="btn btn-pill ms-2">Submit</button>
+                    </form>
+
+                    <div id="voc4Result" class="alert mt-3" style="display:none;"></div>
+                    <pre id="voc4Raw" class="mt-2" style="display:none; max-height:300px; overflow:auto;"></pre>
+                </div>
+
             </div>
         </div>
     </div>

@@ -74,11 +74,6 @@ function checkNamespaceURI(uri) {
     }
   }
 
-  let versionUri = uri;
-  if (uri[uri.length - 1] === '/') {
-    versionUri = uri.slice(0, -1) + '#';
-  }
-
   // 3) Proveedor recomendado
   if (host) {
     const recommendedHosts = [
@@ -181,7 +176,7 @@ function checkNamespaceURI(uri) {
       ${messages.join("")}
     </ul>
   `;
-  checkVersionSchema(versionUri);
+  checkVersionSchema(uri);
 }
 
 
@@ -282,14 +277,18 @@ function checkVersionSchema(uri) {
     base = uri + '/';
   }
 
+  const nsForVersion = uri.endsWith('#') ? uri.slice(0, -1) : uri; // quita '#' si lo hay
+  const baseForVersion = nsForVersion.endsWith('/') ? nsForVersion : (nsForVersion + '/');
+
+
   // Ejemplo SemVer
   const today = new Date();
   const yyyy = today.getFullYear();
   const mm = String(today.getMonth() + 1).padStart(2, '0');
   const dd = String(today.getDate()).padStart(2, '0');
 
-  const exampleSemver = base + '1.0.0';
-  const exampleCalver = base + `${yyyy}-${mm}-${dd}`;
+  const exampleSemver = baseForVersion + '1.0.0';
+  const exampleCalver = baseForVersion + `${yyyy}-${mm}-${dd}`;
 
   versionBox.classList.remove("alert-light");
   versionBox.classList.add("alert-info");
@@ -357,7 +356,7 @@ function checkVersionSchema(uri) {
   function updatePreview() {
     const suffix = suffixInput.value.trim();
     if (suffix) {
-      preview.textContent = base + suffix;
+      preview.textContent = baseForVersion + suffix;
     } else {
       preview.textContent = '(please enter a version string)';
     }
@@ -398,8 +397,8 @@ function getCurrentVersionIri() {
   const suffix = (suffixInput.value || '').trim();
   if (!ns || !suffix) return '';
 
-  const last = ns[ns.length - 1];
-  const base = (last === '/' || last === '#') ? ns : (ns + '/');
+  const nsForVersion = ns.endsWith('#') ? ns.slice(0, -1) : ns; // quita '#'
+  const base = nsForVersion.endsWith('/') ? nsForVersion : (nsForVersion + '/');
 
   return base + suffix;
 }
@@ -588,49 +587,49 @@ function transformDiagramWithChowlk(file) {
     }
   })
   
+
 .then(data => {
-  // Chowlk devuelve la TTL bajo 'ttl_data' (según tu uso)
-  const ttl = data.ttl_data || data.ttl || '';
+  // TTL devuelta por Chowlk (cruda o texto)
+  const ttlChowlk = data.ttl_data || data.ttl || '';
 
-  // Construir metadata TTL en crudo y fusionarlo con el TTL de Chowlk
-  const metadataTtl = getMetadataTtlRaw();   // ← usa tu Paso 1
-  const finalTtl    = mergeTtls(metadataTtl, ttl);
+  // 1) Decodifica tu metadata si está con entidades (por si usas &lt; &gt;)
+  const metadataTtlRaw = decodeHtmlEntities(getMetadataTtlRaw());
 
-  // Guardar el TTL combinado para la descarga
+  // 2) Elimina el bloque de ontología que venga en la TTL de Chowlk
+  const chowlkTtlClean = stripOntologyBlocks(ttlChowlk);
+
+  // 3) Fusiona: prefijos únicos + tu metadata (ontología) + cuerpo chowlk limpio
+  const finalTtl = mergeTtls(metadataTtlRaw, chowlkTtlClean);
+
+  // Guarda el TTL combinado para descargar
   generatedTtl = finalTtl;
 
   dragText.style.display = 'none';
   response.style.display = 'block';
-
   response.innerHTML = `
-       <strong>Combined Turtle (TTL): metadata + diagram</strong>
+    <strong>Combined Turtle (TTL): metadata + diagram</strong>
     <pre class="mt-2 mb-0" style="white-space: pre; overflow-x:auto;">${escapeHtml(finalTtl)}</pre>
   `;
 
-  if (downloadWrapper) {
-    downloadWrapper.style.display = 'block';
-  }
-  setDownloadTtlEnabled(true)
-  })
-  .catch(err => {
-    console.error('Error calling Chowlk:', err);
+  if (downloadWrapper) downloadWrapper.style.display = 'block';
+  setDownloadTtlEnabled(true);
+})
+.catch(err => {
+  console.error('Error calling Chowlk:', err);
+  setDownloadTtlEnabled(false); // ← corrige el typo tDownloadTtlEnabled
 
-    tDownloadTtlEnabled(false);
+  dragText.style.display = 'block';
+  dragText.textContent = 'There was an error transforming your diagram. Please try again.';
 
-    dragText.style.display = 'block';
-    dragText.textContent = 'There was an error transforming your diagram. Please try again.';
+  response.style.display = 'block';
+  response.innerHTML = `
+    <div class="alert alert-danger mt-2 mb-0">
+      <strong>Error:</strong> ${escapeHtml(err.message)}
+    </div>
+  `;
 
-    response.style.display = 'block';
-    response.innerHTML = `
-      <div class="alert alert-danger mt-2 mb-0">
-        <strong>Error:</strong> ${escapeHtml(err.message)}
-      </div>
-    `;
-
-    if (downloadWrapper) {
-      downloadWrapper.style.display = 'none';
-    }
-   });
+  if (downloadWrapper) downloadWrapper.style.display = 'none';
+});
 }
 
 
@@ -667,6 +666,7 @@ function transformDiagramWithChowlk(file) {
 
 
 
+
 function splitPrefixesAndBody(ttl) {
   const lines = ttl.split('\n');
   const prefixLines = [];
@@ -678,6 +678,28 @@ function splitPrefixesAndBody(ttl) {
   });
   return { prefixLines, body: bodyLines.join('\n').trim() };
 }
+
+function mergeTtls(metadataTtlRaw, chowlkTtlRaw) {
+  const { prefixLines: p1, body: b1 } = splitPrefixesAndBody(metadataTtlRaw);
+  const { prefixLines: p2, body: b2 } = splitPrefixesAndBody(chowlkTtlRaw);
+
+  // Mapa de prefijos únicos (prioriza los del metadata)
+  const map = new Map();
+  const parse = line => {
+    const m = line.match(/@prefix\s+([\w\-]+):\s*<([^>]+)>\s*\./);
+    return m ? [m[1], m[2]] : null;
+  };
+  p1.forEach(line => { const kv = parse(line); if (kv) map.set(kv[0], kv[1]); });
+  p2.forEach(line => { const kv = parse(line); if (kv && !map.has(kv[0])) map.set(kv[0], kv[1]); });
+
+  const mergedPrefixes = Array.from(map.entries())
+    .map(([pref, iri]) => `@prefix ${pref}: <${iri}> .`)
+    .join('\n');
+
+  // TTL combinado: prefijos únicos + cuerpo metadata + cuerpo chowlk (sin ontología chowlk)
+  return `${mergedPrefixes}\n\n${b1}\n\n${b2}\n`;
+}
+
 
 function mergeTtls(metadataTtl, chowlkTtl) {
   const { prefixLines: p1, body: b1 } = splitPrefixesAndBody(metadataTtl);
@@ -741,7 +763,50 @@ function getSuggestedFilenameFromMetadata() {
 
   const today = new Date().toISOString().slice(0,10); // YYYY-MM-DD
   return `${base}${version ? '-' + version : ''}-${today}.ttl`;
+}
+
+
+// Convierte entidades HTML a crudo (<, >, &) por si tu metadata usa &lt; &gt; &amp;
+function decodeHtmlEntities(str) {
+  return str
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&');
+}
+
+/**
+ * Elimina cualquier bloque Turtle que declare la ontología:
+ * - "a owl:Ontology"
+ * - o "rdf:type owl:Ontology"
+ * Soporta bloques multi-línea terminados en '.'
+ */
+function stripOntologyBlocks(ttlRaw) {
+  const lines = ttlRaw.split('\n');
+  const blocks = [];
+  let current = [];
+
+  const endsStatement = (line) => /\.\s*$/.test(line); // termina en '.'
+  const isOntologyBlock = (blockText) => {
+    // Normalizamos espacios para simplificar detección
+    const t = blockText.replace(/\s+/g, ' ');
+    // Match " a owl:Ontology " o " rdf:type owl:Ontology " en el bloque
+    return /\b(a|rdf:type)\s+owl:Ontology\b/i.test(t);
+  };
+
+  for (const line of lines) {
+    current.push(line);
+    if (endsStatement(line)) {
+      const blockText = current.join('\n');
+      if (!isOntologyBlock(blockText)) {
+        blocks.push(blockText);
+      }
+      current = []; // reset
+    }
   }
+  // Si hay líneas sueltas sin '.' al final, las conservamos
+  if (current.length) blocks.push(current.join('\n'));
+  return blocks.join('\n');
+}
 
 
 
@@ -796,8 +861,6 @@ document.addEventListener('change', function (e) {
 
 
 
-
-
 function getMetadataTtlRaw() {
   // Prefix y namespace (paso 1)
   const prefixInput = document.getElementById('prefixField');
@@ -809,7 +872,7 @@ function getMetadataTtlRaw() {
   if (!prefix) prefix = 'ex';
   if (!ns) ns = 'http://example.com/ontology#';
 
-  // Asegurar que el namespace para @prefix y vann termina en / o #
+  // Asegurar que el namespace (para @prefix y vann) termina en / o #
   let base = ns;
   const lastChar = base[base.length - 1];
   if (lastChar !== '/' && lastChar !== '#') {
@@ -831,7 +894,11 @@ function getMetadataTtlRaw() {
       const suffix = (suffixInput.value || '').trim();
       if (suffix) {
         const last = ns[ns.length - 1];
-        const versionBase = (last === '/' || last === '#') ? ns : (ns + '/');
+        // ❗ para versionIRI: sin '#', siempre con '/'
+        const versionBase =
+          last === '#'
+            ? ns.slice(0, -1) + '/'
+            : (last === '/' ? ns : ns + '/');
         versionIri = versionBase + suffix;
       }
     }
@@ -860,13 +927,14 @@ function getMetadataTtlRaw() {
     return str.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
   }
 
-  // Construcción del TTL crudo (con < > reales)
+  // ✅ TTL crudo con < >
   let ttl = '';
   ttl += `@prefix ${prefix}: <${base}> .\n`;
   ttl += '@prefix owl:    <http://www.w3.org/2002/07/owl#> .\n';
   ttl += '@prefix dcterms:<http://purl.org/dc/terms/> .\n';
   ttl += '@prefix vann:   <http://purl.org/vocab/vann/> .\n\n';
 
+  // Puedes dejar el sujeto como CURIE `${prefix}:` o usar IRI explícito <...>
   ttl += `${prefix}: a owl:Ontology ;\n`;
   ttl += `    dcterms:title "${esc(title)}" ;\n`;
   ttl += `    dcterms:description "${esc(desc)}" ;\n`;
@@ -888,17 +956,14 @@ function getMetadataTtlRaw() {
   if (versionIri) {
     ttl += `    owl:versionIRI <${versionIri}> ;\n`;
   } else {
-    ttl += `    owl:versionIRI <${base}1.0.0> ;\n`;
+    // Fallback 1.0.0 con '#', pero preferible que tengas preview o suffix
+    ttl += `    owl:versionIRI <${base.replace(/#$/, '/') + '1.0.0'}> ;\n`;
   }
 
   ttl += `    vann:preferredNamespaceUri <${base}> .\n`;
 
   return ttl;
 }
-
-
-
-
 
 
 function updateMetadataSnippet() {

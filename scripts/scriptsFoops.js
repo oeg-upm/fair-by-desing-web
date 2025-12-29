@@ -33,6 +33,191 @@
         fail: 'VOC2 failed: no imports or reuse of external vocabularies detected (see details below).',
         generic: 'VOC2 completed. See details below.'
       }
+    },
+
+    // 3) VOC3-T – Ontology documentation: all terms have labels
+    voc3Form: {
+      testCode: 'VOC3',
+      fieldId: 'voc3Field',
+      boxId: 'voc3Result',
+      rawId: 'voc3Raw',
+      messages: {
+        running: 'Running VOC3… please wait.',
+        pass: 'VOC3 passed: all terms have labels.',
+        fail: 'VOC3 failed: some terms are missing labels (see details below).',
+        generic: 'VOC3 completed. See details below.'
+      }
+    },
+
+    // 4) VOC4-T – Ontology documentation: all terms have definitions
+    voc4Form: {
+      testCode: 'VOC4',
+      fieldId: 'voc4Field',
+      boxId: 'voc4Result',
+      rawId: 'voc4Raw',
+      messages: {
+        running: 'Running VOC4… please wait.',
+        pass: 'VOC4 passed: all terms have definitions.',
+        fail: 'VOC4 failed: some terms are missing definitions (see details below).',
+        generic: 'VOC4 completed. See details below.'
+      }
+    },
+
+    // ---------- Online publication ----------
+    http1Form: {
+      testCode: 'HTTP1',
+      fieldId: 'http1Field',
+      boxId: 'http1Result',
+      rawId: 'http1Raw',
+      messages: {
+        running: 'Running HTTP1… please wait.',
+        pass: 'HTTP1 passed: ontology uses an open protocol (HTTP/HTTPS).',
+        fail: 'HTTP1 failed: ontology does not seem accessible via HTTP/HTTPS (see details below).',
+        generic: 'HTTP1 completed. See details below.'
+      }
+    },
+
+    rdf1Form: {
+      testCode: 'RDF1',
+      fieldId: 'rdf1Field',
+      boxId: 'rdf1Result',
+      rawId: 'rdf1Raw',
+      messages: {
+        running: 'Running RDF1… please wait.',
+        pass: 'RDF1 passed: ontology is available in a supported RDF serialization.',
+        fail: 'RDF1 failed: no supported RDF serialization could be retrieved (see details below).',
+        generic: 'RDF1 completed. See details below.'
+      }
+    },
+
+    cn1Form: {
+      testCode: 'CN1',
+      fieldId: 'cn1Field',
+      boxId: 'cn1Result',
+      rawId: 'cn1Raw',
+      messages: {
+        running: 'Running CN1… please wait.',
+        pass: 'CN1 passed: content negotiation for RDF is available.',
+        fail: 'CN1 failed: content negotiation for RDF is not working (see details below).',
+        generic: 'CN1 completed. See details below.'
+      }
+    },
+
+    doc1Form: {
+      testCode: 'DOC1',
+      fieldId: 'doc1Field',
+      boxId: 'doc1Result',
+      rawId: 'doc1Raw',
+      messages: {
+        running: 'Running DOC1… please wait.',
+        pass: 'DOC1 passed: HTML documentation is available.',
+        fail: 'DOC1 failed: HTML documentation was not detected (see details below).',
+        generic: 'DOC1 completed. See details below.'
+      }
+    },
+
+    uri1Form: {
+      testCode: 'URI1',
+      fieldId: 'uri1Field',
+      boxId: 'uri1Result',
+      rawId: 'uri1Raw',
+      messages: {
+        running: 'Running URI1… please wait.',
+        pass: 'URI1 passed: ontology URI is resolvable.',
+        fail: 'URI1 failed: ontology URI is not resolvable (see details below).',
+        generic: 'URI1 completed. See details below.'
+      }
+    },
+
+    uri2Form: {
+      testCode: 'URI2',
+      fieldId: 'uri2Field',
+      boxId: 'uri2Result',
+      rawId: 'uri2Raw',
+      messages: {
+        running: 'Running URI2… please wait.',
+        pass: 'URI2 passed: consistent ontology identifiers are employed.',
+        fail: 'URI2 failed: inconsistent ontology identifiers detected (see details below).',
+        generic: 'URI2 completed. See details below.'
+      }
+    },
+
+    ver1Form: {
+      testCode: 'VER1',
+      fieldId: 'ver1Field',
+      boxId: 'ver1Result',
+      rawId: 'ver1Raw',
+      messages: {
+        running: 'Running VER1… please wait.',
+        pass: 'VER1 passed: a version IRI is declared in the ontology metadata.',
+        fail: 'VER1 failed: no version IRI detected (see details below).',
+        generic: 'VER1 completed. See details below.'
+      }
+    },
+
+    ver2Form: {
+      testCode: 'VER2',
+      fieldId: 'ver2Field',
+      boxId: 'ver2Result',
+      rawId: 'ver2Raw',
+      messages: {
+        running: 'Running VER2… please wait.',
+        pass: 'VER2 passed: the version IRI resolves.',
+        fail: 'VER2 failed: the version IRI does not resolve (see details below).',
+        generic: 'VER2 completed. See details below.'
+      }
+    },
+
+    find3Form: {
+      testCode: 'FIND3',
+      fieldId: 'find3Field',
+      boxId: 'find3Result',
+      rawId: 'find3Raw',
+      messages: {
+        running: 'Running FIND3… please wait.',
+        pass: 'FIND3 passed: ontology found in a community registry.',
+        fail: 'FIND3 failed: ontology not found in the expected registries (see details below).',
+        generic: 'FIND3 completed. See details below.'
+      }
+    },
+
+    find3bisForm: {
+      testCode: 'FIND_3_BIS',
+      fieldId: 'find3bisField',
+      boxId: 'find3bisResult',
+      rawId: 'find3bisRaw',
+      messages: {
+        running: 'Running FIND_3_BIS… please wait.',
+        pass: 'FIND_3_BIS passed: metadata are accessible even when the ontology is not.',
+        fail: 'FIND_3_BIS failed: metadata access is not ensured (see details below).',
+        generic: 'FIND_3_BIS completed. See details below.'
+      }
+    },
+
+    om42Form: {
+      testCode: "OM4.2",
+      fieldId: "om42Field",
+      boxId: "om42Result",
+      rawId: "om42Raw",
+      messages: {
+        running: "Running OM4.2-T… please wait.",
+        pass: "OM4.2-T passed: ontology maintenance policy detected.",
+        fail: "OM4.2-T failed: no maintenance policy metadata found (see details below).",
+        generic: "OM4.2-T completed. See details below."
+      }
+    },
+
+    ver2Form: {
+      testCode: "VER2",
+      fieldId: "ver2Field",
+      boxId: "ver2Result",
+      rawId: "ver2Raw",
+      messages: {
+        running: "Running VER2-T… please wait.",
+        pass: "VER2-T passed: ontology version IRI resolves correctly.",
+        fail: "VER2-T failed: ontology version IRI does not resolve (see details below).",
+        generic: "VER2-T completed. See details below."
+      }
     }
 
     // EJEMPLO para añadir otro test (crear también el HTML con esos IDs):
