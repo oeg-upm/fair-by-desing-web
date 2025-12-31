@@ -322,7 +322,7 @@
       toggle.type = 'button';
       toggle.id = toggleId;
       toggle.className = 'btn btn-sm btn-outline-secondary mt-2';
-      toggle.textContent = 'Mostrar JSON';
+      toggle.textContent = 'Show JSON';
       toggle.style.display = 'none';
       toggle.setAttribute('data-foops-toggle', cfg.rawId);
 
@@ -413,7 +413,7 @@
     let status = passed;
     if (status === null && pct !== null) status = (pct >= 100); // umbral 100%
 
-    const statusLabel = (status === true) ? 'PAST' : (status === false) ? 'FAILED' : 'UNKNOWN';
+    const statusLabel = (status === true) ? 'PASSED' : (status === false) ? 'FAILED' : 'UNKNOWN';
     const badgeClass = (status === true) ? 'bg-success' : (status === false) ? 'bg-danger' : 'bg-secondary';
     const barClass = (status === true) ? 'bg-success' : (status === false) ? 'bg-danger' : 'bg-secondary';
     const iconClass = (status === true)
