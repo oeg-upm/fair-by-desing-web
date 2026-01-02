@@ -370,7 +370,7 @@
 
     if (toggle) {
       toggle.style.display = 'inline-block';
-      toggle.textContent = 'Mostrar JSON';
+      toggle.textContent = 'Show JSON';
     }
   }
 
