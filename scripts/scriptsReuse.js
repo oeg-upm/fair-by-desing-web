@@ -36,3 +36,49 @@
     if (el.id === "vocab2Field") sync("vocab2Field", "vocabField");
   }, true);
 })();
+
+(() => {
+  if (window.__runAllReuseBound) return;
+  window.__runAllReuseBound = true;
+
+  const FORM_IDS = [
+    "vocabForm",
+    "vocab2Form"
+  ];
+
+  function clickSubmit(formId) {
+    const form = document.getElementById(formId);
+    if (!form) return;
+    const btn = form.querySelector('button[type="submit"], input[type="submit"]');
+    if (btn) btn.click();
+    else form.requestSubmit?.(); // fallback moderno
+  }
+
+  async function runAll() {
+    const mainBtn = document.getElementById("runAllReuseTests");
+    if (mainBtn) {
+      mainBtn.disabled = true;
+      mainBtn.textContent = "Running...";
+    }
+
+    for (const id of FORM_IDS) {
+      clickSubmit(id);
+      // pequeña pausa para no spamear (ajústala si quieres)
+      await new Promise(r => setTimeout(r, 250));
+    }
+
+    if (mainBtn) {
+      mainBtn.disabled = false;
+      mainBtn.textContent = "Run all tests";
+    }
+  }
+
+  // Delegación por si el HTML se inyecta tarde
+  document.addEventListener("click", (e) => {
+    const t = e.target;
+    if (t && t.id === "runAllReuseTests") {
+      e.preventDefault();
+      runAll();
+    }
+  }, true);
+})();

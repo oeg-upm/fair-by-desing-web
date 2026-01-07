@@ -36,3 +36,49 @@
     if (el.id === "voc4Field") sync("voc4Field", "voc3Field");
   }, true);
 })();
+
+(() => {
+  if (window.__runAllDocuBound) return;
+  window.__runAllDocuBound = true;
+
+  const FORM_IDS = [
+    "voc3Form",
+    "voc4Form"
+  ];
+
+  function clickSubmit(formId) {
+    const form = document.getElementById(formId);
+    if (!form) return;
+    const btn = form.querySelector('button[type="submit"], input[type="submit"]');
+    if (btn) btn.click();
+    else form.requestSubmit?.(); // fallback moderno
+  }
+
+  async function runAll() {
+    const mainBtn = document.getElementById("runAllDocumentationTests");
+    if (mainBtn) {
+      mainBtn.disabled = true;
+      mainBtn.textContent = "Running...";
+    }
+
+    for (const id of FORM_IDS) {
+      clickSubmit(id);
+      // pequeña pausa para no spamear (ajústala si quieres)
+      await new Promise(r => setTimeout(r, 250));
+    }
+
+    if (mainBtn) {
+      mainBtn.disabled = false;
+      mainBtn.textContent = "Run all tests";
+    }
+  }
+
+  // Delegación por si el HTML se inyecta tarde
+  document.addEventListener("click", (e) => {
+    const t = e.target;
+    if (t && t.id === "runAllDocumentationTests") {
+      e.preventDefault();
+      runAll();
+    }
+  }, true);
+})();
